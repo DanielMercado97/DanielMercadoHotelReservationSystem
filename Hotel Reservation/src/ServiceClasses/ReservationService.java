@@ -22,7 +22,6 @@ public class ReservationService {
             //System.out.println("Reservation Service: null! Instantiating an object of the class.");
             reservationService = new ReservationService();
         }
-        //otherwise? we will just return the reference of the class itself (at least that's what it should do).
         return reservationService;
     }
 
@@ -43,9 +42,15 @@ public class ReservationService {
 
     public Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate,Date checkOutDate){
         Collection<IRoom> avRooms = findRooms(checkInDate,checkOutDate);
+        Collection<Reservation> customerReservations = getCustomerReservation(customer);
+        Reservation makeReservation = new Reservation(customer,room,checkInDate,checkOutDate);
+
+        if(customerReservations == null){
+            customerReservations = new HashSet<>();
+        }
         if(avRooms.contains(room)){
-            Reservation makeReservation = new Reservation(customer,room,checkInDate,checkOutDate);
             if(reservations.add(makeReservation)){
+                customerReservations.add(makeReservation);
                 System.out.println("Congratulations on making your reservation!");
                 return makeReservation;
             }
@@ -56,7 +61,7 @@ public class ReservationService {
             }
         }
 
-        return null;
+        return makeReservation;
     }
     public Collection<IRoom>findRooms(Date checkInDate, Date checkOutDate){
         //creating a new for rooms that haven't been reserved already.
@@ -90,13 +95,8 @@ public class ReservationService {
     }
 
     public Collection<Reservation> getCustomerReservation(Customer customer){
-        Collection<Reservation> customerReservations = new HashSet<>();
-        for(Reservation getReservation: reservations){
-            if(getReservation.getCustomer().equals(customer)){
-                customerReservations.add(getReservation);
-            }
-        }
-        return customerReservations;
+        CustomerService.getInstance().getCustomer(customer.getEmail());
+        return reservations;
     }
 
     public Collection<IRoom> getAllRooms(){

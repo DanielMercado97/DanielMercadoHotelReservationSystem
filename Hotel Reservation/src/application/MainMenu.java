@@ -265,8 +265,7 @@ public class MainMenu {
         System.out.println("Welcome Back! Here to check a reservation? Enter your email in the following format: 'my@email.com'");
         String resCheckEmail = scanner.next();
         Customer resCheckCustomer = hotelResource.getCustomer(resCheckEmail);
-
-
+        Collection<Reservation> reservations = hotelResource.getCustomerReservation(String.valueOf(resCheckCustomer));
         //if customer doesn't have an account with the hotel, it'll open the createAccount function and let them make an account!
         if(resCheckCustomer == null){
             System.out.println("Sorry, no account is associated with this email :/. Maybe you should try making a brand new account with us and try again!");
@@ -274,7 +273,6 @@ public class MainMenu {
             createAccount();
         }
         else {
-            Collection<Reservation> reservations = hotelResource.getCustomerReservation(String.valueOf(resCheckCustomer));
             if(reservations.isEmpty() ||reservations == null){
                 System.out.println("There are no reservations under this account. ");
             }
