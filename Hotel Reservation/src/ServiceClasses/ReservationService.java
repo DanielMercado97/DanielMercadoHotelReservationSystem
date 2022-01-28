@@ -7,6 +7,9 @@ import ModelClasses.Reservation;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+/*
+https://knowledge.udacity.com/questions/632066
+ */
 
 public class ReservationService {
     private static ReservationService reservationService;
@@ -39,6 +42,9 @@ public class ReservationService {
         return null;
     }
 
+    static Reservation gNR(Customer customer, IRoom room,Date checkInDate,Date checkOutDate){
+        return new Reservation(customer,room,checkInDate,checkOutDate);
+    }
 
     public Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate,Date checkOutDate){
         Collection<IRoom> avRooms = findRooms(checkInDate,checkOutDate);
@@ -96,6 +102,12 @@ public class ReservationService {
 
     public Collection<Reservation> getCustomerReservation(Customer customer){
         CustomerService.getInstance().getCustomer(customer.getEmail());
+        Collection<Reservation> customerResv = new HashSet<>();
+        for (Reservation res : reservations) {
+            if (res.getCustomer().equals(customer)) {
+                customerResv.add(res);
+            }
+        }
         return reservations;
     }
 

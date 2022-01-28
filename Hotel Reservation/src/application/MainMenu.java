@@ -13,6 +13,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 /*
 * http://tutorials.jenkov.com/java-date-time/java-util-calendar.html
+* https://github.com/youth-xiao/hotelReservationSystem/blob/main/hotel%20reservation%20system/src/MainMenu.java
+* https://knowledge.udacity.com/questions/655317
 * */
 
 public class MainMenu {
@@ -25,35 +27,47 @@ public class MainMenu {
     public static final SimpleDateFormat formatter = new SimpleDateFormat(dateformat);
 
     public static void menuSU(){
-        boolean running = true;
-        while(running){
-            Scanner scanner = new Scanner(System.in);
-            displayMenu();
-            int menuChoice = Integer.parseInt(scanner.next());
-            switch (menuChoice){
-                case 1:
-                    System.out.println("Nice, let's get you set up with a room!\n");
-                    findAndReserveRooms(scanner);
-                    break;
-                case 2:
-                    System.out.println("You want to see your reservation? Sure thing!\n");
-                    seeMyReservation(scanner);
-                    break;
-                case 3:
-                    System.out.println("Ohhhh, I see you're new here! Let's get you started with a new account!\n");
-                    createAccount();
-                    break;
-                case 4:
-                    System.out.println("Taking you to the Administrative Section, Boss.\n");
-                    AdminMenu.adminMenu();
+        int x = 1;
+        do {
+            try {
+                boolean running = true;
+                while (running) {
+                    Scanner scanner = new Scanner(System.in);
+                    displayMenu();
+                    int menuChoice = Integer.parseInt(scanner.next());
+                    switch (menuChoice) {
+                        case 1:
+                            System.out.println("Nice, let's get you set up with a room!\n");
+                            findAndReserveRooms(scanner);
+                            break;
+                        case 2:
+                            System.out.println("You want to see your reservation? Sure thing!\n");
+                            seeMyReservation(scanner);
+                            break;
+                        case 3:
+                            System.out.println("Ohhhh, I see you're new here! Let's get you started with a new account!\n");
+                            createAccount();
+                            break;
+                        case 4:
+                            System.out.println("Taking you to the Administrative Section, Boss.\n");
+                            AdminMenu.adminMenu();
 
-                case 5:
-                    System.out.println("Exiting Program Now! Thanks for Stopping By!");
-                    running = false;
-                    break;
+                        case 5:
+                            System.out.println("Exiting Program Now! Thanks for Stopping By!");
+                            running = false;
+                            break;
+
+                    }
+                }
+
+
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input, try again!");
+                displayMenu();
             }
-
         }
+        while(x==1);
+
     }
 
 
@@ -144,33 +158,6 @@ public class MainMenu {
 
 
 
-    /*This function will make it easier to access a user's profile to reserve a room. This function checks to see if the user has a valid account with the hotel
-    public static Customer checkValidCustAcc(Scanner scanner){
-        System.out.println("Just want to double check with you, do you already have an account with us? Yes or No: ");
-        String answer = scanner.next();
-        if(answer.equalsIgnoreCase("yes")){
-            System.out.println("Enter your email here: ");
-            String e = scanner.next();
-            if(hotelResource.getCustomer(e)==null){
-                System.out.println("Aww man, we couldn't retrieve your email unfortunately :(");
-            }
-            else{
-                return hotelResource.getCustomer(e);
-            }
-
-        }
-        else if (answer.equalsIgnoreCase("no")){
-            System.out.println("Let's set you up with a new account. Would you like to set one up? (Yes or No) ");
-            String response = scanner.next();
-            if(response.equalsIgnoreCase("yes")){
-                return createAccount();
-            }
-        }
-        return null;
-    }
-*/
-
-
     //This function is meant to help find alternative days for reservation if there are no available rooms on the days the user entered!
     public static Date alternativeDates(Date date, int d){
         Calendar calendar = new GregorianCalendar();
@@ -206,8 +193,8 @@ public class MainMenu {
 
     public static Date getCheckInDate(Scanner scanner){
 
-        boolean checkInDate = false;
-        while(!checkInDate){
+        boolean checkInDate = true;
+        while(checkInDate){
             try {
                 System.out.println("Let's get you started. ");
                 System.out.println("Enter a check in date using the following format: 'MM/dd/yyyy");
@@ -227,8 +214,8 @@ public class MainMenu {
 
     public static Date getCheckOutDate(Scanner scanner, Date ciDOP){
 
-        boolean checkOutDate = false;
-        while(!checkOutDate){
+        boolean checkOutDate = true;
+        while(checkOutDate){
             try {
                 System.out.println("Alright, let's figure out a check out date ");
                 System.out.println("Enter a check out date using the following format: 'MM/dd/yyyy");
@@ -265,7 +252,7 @@ public class MainMenu {
         System.out.println("Welcome Back! Here to check a reservation? Enter your email in the following format: 'my@email.com'");
         String resCheckEmail = scanner.next();
         Customer resCheckCustomer = hotelResource.getCustomer(resCheckEmail);
-        Collection<Reservation> reservations = hotelResource.getCustomerReservation(String.valueOf(resCheckCustomer));
+        Collection<Reservation> reservations = hotelResource.getCustomerReservation(resCheckEmail);
         //if customer doesn't have an account with the hotel, it'll open the createAccount function and let them make an account!
         if(resCheckCustomer == null){
             System.out.println("Sorry, no account is associated with this email :/. Maybe you should try making a brand new account with us and try again!");

@@ -4,6 +4,9 @@ import ModelClasses.Customer;
 
 import java.util.Collection;
 import java.util.HashSet;
+/*
+https://knowledge.udacity.com/questions/657687
+ */
 
 public class CustomerService {
     //declaration of static reference, references the class.
